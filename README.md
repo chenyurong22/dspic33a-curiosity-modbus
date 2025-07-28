@@ -4,7 +4,7 @@
     <img alt="Microchip Logo." src="images/microchip_logo_black_red.png">
 </picture>
 
-## dspic33a curiosity modbus demo
+## dsPIC33A Curiosity Modbus Demo
 
 ![Board](images/board.jpg)
 
@@ -19,13 +19,13 @@ This is a basic Modbus demo to show use of the nanomodbus library (https://githu
 ## Software Used 
 
 - [MPLAB® X IDE v6.20](https://www.microchip.com/mplabx) or newer
-- [MPLAB® XC16 v3.20](https://www.microchip.com/xcdsc) or newer
+- [MPLAB® XC-DSC v3.20](https://www.microchip.com/xcdsc) or newer
 - Device Family Pack: dsPIC33AK-MC_DFP v1.1.109
 - [MPLAB® Code Configurator (MCC) 5.1.2](https://www.microchip.com/mcc) or newer
 
 ## Hardware Used
 
-- [dsPIC33AK Curiosity Board](https://www.microchip.com/en-us/development-tool/EV74H48A)
+- [Curiosity Platform Development Board](https://www.microchip.com/en-us/development-tool/EV74H48A)
 - [dsPIC33AK128MC106 DIM](https://www.microchip.com/en-us/development-tool/ev02g02a)
 
 ## Setup
@@ -56,22 +56,22 @@ client to write and then read some registers and coils.
 **Clock Configuration**
 
 - Clock Configuration is done in MCC Melody User Interface for this demo code <br>
-  ![clock settings](images/clock.PNG)
+  ![clock settings](images/clock.png)
 
 **UART Configuration**
 
 - UART Configuration is done in MCC Melody User Interface for this demo code <br>
-  ![uart settings](images/uart.PNG)
+  ![uart settings](images/uart.png)
 
 **Timer Configuration**
 
 - Timer Configuration is done in MCC Melody User Interface for this demo code <br>
-  ![timer settings](images/timer.PNG)
+  ![timer settings](images/timer.png)
 
 **PIN Configuration**
 
 - UART Pins: RD1 as U1TX and RD3 as U1RX<br>
-  ![pin selection](images/PinSelection.PNG)
+  ![pin selection](images/PinSelection.png)
 
 
 
