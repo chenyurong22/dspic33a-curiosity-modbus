@@ -8,7 +8,9 @@
 /*
    This example application sets up an RTU server and handles modbus requests
 
-   This server supports the following function codes:
+   While the nanoModbus stack is compatible with all function codes, this server 
+   implementation specifically supports the following function codes:
+   
    FC 01 (0x01) Read Coils
    FC 03 (0x03) Read Holding Registers
    FC 15 (0x0F) Write Multiple Coils
