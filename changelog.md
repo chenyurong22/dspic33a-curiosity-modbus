@@ -2,11 +2,8 @@
 
 ### Release Highlights
 
-- Initial release - Refer README.md for summary and execution procedure
+- Initial release 
 
-### Features Added\Updated
-
-- modbus communication from Modbus RTU master to modbus RTU server(curiosity board).
 
 
 

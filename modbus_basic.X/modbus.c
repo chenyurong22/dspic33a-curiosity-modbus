@@ -316,18 +316,3 @@ int32_t write_serial(const uint8_t* buf, uint16_t count, int32_t byte_timeout_ms
    
     return bytes_written;
 }
- 
-
-//Explanation
-//Timeout Modes:
-//If byte_timeout_ms equals 0, each function makes one attempt (non?blocking) and returns immediately.
-//If it?s greater than 0, then for each byte a local timer is started and the code spins (busy?wait) until either the data is ready (or the transmitter is ready) or the timeout expires.
-//Negative timeout means ?wait forever? (the timeout check is never effective in that case).
-//UART-specific Checks:
-//For reading, we check if the UART receive buffer has data using U1STAbits.URXDA and, if an overrun error occurs (OERR), we clear it and return an error.
-//For writing, we wait on the transmitter?s availability as indicated by U1STAbits.TRMT.
-//Timing Function:
-//The get_current_time_ms() function is a stub. On a dsPIC, you may configure one of the hardware timers to tick every millisecond and implement this function accordingly.
-//Customization:
-//If your platform does not use UART1 or if you?re multiplexing different communication interfaces (like TCP vs. serial), you can use the arg pointer to pass a handle or context structure that lets you decide which low-level API calls to use.
- 
