@@ -1,9 +1,10 @@
 # dspic33a-curiosity-modbus v1.0.0
+
 ### Release Highlights
 
+- Initial release 
 
 
-### Features Added\Updated
 
 
 
