@@ -10,7 +10,7 @@
 
 ## Summary
 
-This is a basic Modbus demo to show use of the nanomodbus library (https://github.com/debevv/nanoMODBUS). 
+This is a basic Modbus demo to show use of the nanoMODBUS library (https://github.com/debevv/nanoMODBUS). 
 
 ## Related Documentation
 
@@ -18,8 +18,8 @@ This is a basic Modbus demo to show use of the nanomodbus library (https://githu
 
 ## Software Used 
 
-- [MPLAB® X IDE v6.20](https://www.microchip.com/mplabx) or newer
-- [MPLAB® XC-DSC v3.20](https://www.microchip.com/xcdsc) or newer
+- [MPLAB® X IDE v6.25](https://www.microchip.com/mplabx) or newer
+- [MPLAB® XC-DSC v3.21](https://www.microchip.com/xcdsc) or newer
 - Device Family Pack: dsPIC33AK-MC_DFP v1.1.109
 - [MPLAB® Code Configurator (MCC) 5.1.2](https://www.microchip.com/mcc) or newer
 
@@ -32,7 +32,7 @@ This is a basic Modbus demo to show use of the nanomodbus library (https://githu
 
 **Hardware Setup**
 
-- Connect a micro-USB cable to port `J24` of Curiosity board to USB port of PC
+- Connect a USB-C cable to port `J24` of Curiosity board to USB port of PC
 
 **MPLAB® X IDE Setup**
 
