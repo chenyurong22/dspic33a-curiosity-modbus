@@ -1,5 +1,5 @@
 /*
-© [2025] Microchip Technology Inc. and its subsidiaries.
+ï¿½ [2025] Microchip Technology Inc. and its subsidiaries.
 
     Subject to your compliance with these terms, you may use Microchip 
     software and any derivatives exclusively with Microchip products. 
@@ -28,6 +28,7 @@
 #include <stdio.h>
 
 #include "modbus.h"
+#include "nanomodbus.h"
 #include "timer1.h"
 
 
@@ -52,11 +53,22 @@ int main(void)
     // Initialize nanoModbus
     NMBS_init();
     
+    // Initialize discrete inputs with example pattern (bits 0,2,4,6 set)
+    for (int i = 0; i < DISCRETE_INPUTS_ADDR_MAX; i++) {
+        nmbs_bitfield_write(server_discrete_inputs, i, (i % 2 == 0));
+    }
+    
     while(1)
     {
         
         // Call the nanoModbus handlers
         NMBS_tasks();
+        
+        // Update input registers with live data (read-only from master)
+        server_input_registers[0] = (uint16_t)(GetMSec() / 1000);   // Uptime in seconds
+        server_input_registers[1] = (uint16_t)(GetMSec() & 0xFFFF); // Raw ms (lower 16 bits)
+        server_input_registers[2] = 0x1234;                          // Static example value
+        server_input_registers[3] = 0xABCD;                          // Static example value
         
         // Toggle a heartbeat LED
         if((GetMSec() - led_toggle_time) > 499){

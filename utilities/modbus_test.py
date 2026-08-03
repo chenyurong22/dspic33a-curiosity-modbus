@@ -61,7 +61,7 @@ from pymodbus import (
 
 # Configure the Modbus RTU client
 client = ModbusSerialClient(
-    port='COM8',  # Serial port (e.g., COM3 on Windows or /dev/ttyUSB0 on Linux)
+    port='COM5',  # Serial port (e.g., COM3 on Windows or /dev/ttyUSB0 on Linux)
     baudrate=115200,      # Baud rate
     timeout=1           # Timeout in seconds
 )
@@ -82,15 +82,31 @@ if client.connect():
 
 
     try:
-        result = client.read_holding_registers(address=1, count=4)  # Address is typically 1
-        print(f"Registers: {result.registers}")
+        result = client.read_holding_registers(address=1, count=4)
+        print(f"Holding Registers: {result.registers}")
 
     except ModbusException as exc:
         print(f"Received ModbusException({exc}) from library")
 
     try:
-        result = client.read_coils(address=1, count=32)  # Address is typically 1
+        result = client.read_coils(address=1, count=32)
         print(f"Coils: {result.bits}")
+
+    except ModbusException as exc:
+        print(f"Received ModbusException({exc}) from library")
+
+    # Read Discrete Inputs (FC 02) - read-only digital inputs
+    try:
+        result = client.read_discrete_inputs(address=0, count=32)
+        print(f"Discrete Inputs: {result.bits}")
+
+    except ModbusException as exc:
+        print(f"Received ModbusException({exc}) from library")
+
+    # Read Input Registers (FC 04) - read-only analog values
+    try:
+        result = client.read_input_registers(address=0, count=4)
+        print(f"Input Registers: {result.registers}")
 
     except ModbusException as exc:
         print(f"Received ModbusException({exc}) from library")
