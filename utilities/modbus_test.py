@@ -59,11 +59,14 @@ from pymodbus import (
     pymodbus_apply_logging_config,
 )
 
+# Prompt user for serial port at runtime
+port = input("Enter COM port (e.g., COM5 or /dev/ttyUSB0): ").strip()
+
 # Configure the Modbus RTU client
 client = ModbusSerialClient(
-    port='COM5',  # Serial port (e.g., COM3 on Windows or /dev/ttyUSB0 on Linux)
-    baudrate=115200,      # Baud rate
-    timeout=1           # Timeout in seconds
+    port=port,
+    baudrate=115200,
+    timeout=1
 )
 
 # Connect to the Modbus device
