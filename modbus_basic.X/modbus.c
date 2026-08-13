@@ -1,3 +1,24 @@
+/*
+  © [2025] Microchip Technology Inc. and its subsidiaries.
+
+    Subject to your compliance with these terms, you may use Microchip 
+    software and any derivatives exclusively with Microchip products. 
+    You are responsible for complying with 3rd party license terms  
+    applicable to your use of 3rd party software (including open source  
+    software) that may accompany Microchip software. SOFTWARE IS "AS IS." 
+    NO WARRANTIES, WHETHER EXPRESS, IMPLIED OR STATUTORY, APPLY TO THIS 
+    SOFTWARE, INCLUDING ANY IMPLIED WARRANTIES OF NON-INFRINGEMENT,  
+    MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE. IN NO EVENT 
+    WILL MICROCHIP BE LIABLE FOR ANY INDIRECT, SPECIAL, PUNITIVE, 
+    INCIDENTAL OR CONSEQUENTIAL LOSS, DAMAGE, COST OR EXPENSE OF ANY 
+    KIND WHATSOEVER RELATED TO THE SOFTWARE, HOWEVER CAUSED, EVEN IF 
+    MICROCHIP HAS BEEN ADVISED OF THE POSSIBILITY OR THE DAMAGES ARE 
+    FORESEEABLE. TO THE FULLEST EXTENT ALLOWED BY LAW, MICROCHIP'S 
+    TOTAL LIABILITY ON ALL CLAIMS RELATED TO THE SOFTWARE WILL NOT 
+    EXCEED AMOUNT OF FEES, IF ANY, YOU PAID DIRECTLY TO MICROCHIP FOR 
+    THIS SOFTWARE.
+*/
+
 #include <xc.h>       // dsPIC header; may need to be adjusted per target device
 #include "nanomodbus.h"
 #include "modbus.h"
@@ -12,9 +33,13 @@
    implementation specifically supports the following function codes:
    
    FC 01 (0x01) Read Coils
+   FC 02 (0x02) Read Discrete Inputs
    FC 03 (0x03) Read Holding Registers
+   FC 04 (0x04) Read Input Registers
+   FC 05 (0x05) Write Single Coil
+   FC 06 (0x06) Write Single Register
    FC 15 (0x0F) Write Multiple Coils
-   FC 16 (0x10) Write Multiple registers
+   FC 16 (0x10) Write Multiple Registers
 */
 
 nmbs_platform_conf platform_conf;
@@ -24,6 +49,10 @@ nmbs_t nmbs;
 // A single nmbs_bitfield variable can keep 2000 coils
 nmbs_bitfield server_coils = {0};
 uint16_t server_registers[REGS_ADDR_MAX + 1] = {0};
+
+// Read-only data: discrete inputs and input registers
+nmbs_bitfield server_discrete_inputs = {0};
+uint16_t server_input_registers[INPUT_REGS_ADDR_MAX + 1] = {0};
 
 int32_t read_serial(uint8_t* buf, uint16_t count, int32_t byte_timeout_ms, void* arg);
 int32_t write_serial(const uint8_t* buf, uint16_t count, int32_t byte_timeout_ms, void* arg);
@@ -75,6 +104,21 @@ nmbs_error handle_write_single_coil(uint16_t address, bool value, uint8_t unit_i
     return NMBS_ERROR_NONE;
 }
 
+nmbs_error handle_read_discrete_inputs(uint16_t address, uint16_t quantity, nmbs_bitfield inputs_out, uint8_t unit_id,
+                                        void* arg) {
+    if (address + quantity > DISCRETE_INPUTS_ADDR_MAX + 1)
+        return NMBS_EXCEPTION_ILLEGAL_DATA_ADDRESS;
+
+    // Read our discrete input values into inputs_out
+    for (int i = 0; i < quantity; i++) {
+        bool value = nmbs_bitfield_read(server_discrete_inputs, address + i);
+        nmbs_bitfield_write(inputs_out, i, value);
+    }
+
+    return NMBS_ERROR_NONE;
+}
+
+
 nmbs_error handle_read_holding_registers(uint16_t address, uint16_t quantity, uint16_t* registers_out, uint8_t unit_id,
                                           void* arg) {
     if (address + quantity > REGS_ADDR_MAX + 1)
@@ -83,6 +127,19 @@ nmbs_error handle_read_holding_registers(uint16_t address, uint16_t quantity, ui
     // Read our registers values into registers_out
     for (int i = 0; i < quantity; i++)
         registers_out[i] = server_registers[address + i];
+
+    return NMBS_ERROR_NONE;
+}
+
+
+nmbs_error handle_read_input_registers(uint16_t address, uint16_t quantity, uint16_t* registers_out, uint8_t unit_id,
+                                        void* arg) {
+    if (address + quantity > INPUT_REGS_ADDR_MAX + 1)
+        return NMBS_EXCEPTION_ILLEGAL_DATA_ADDRESS;
+
+    // Read our input registers values into registers_out
+    for (int i = 0; i < quantity; i++)
+        registers_out[i] = server_input_registers[address + i];
 
     return NMBS_ERROR_NONE;
 }
@@ -124,9 +181,11 @@ void NMBS_init(void){
     
     nmbs_callbacks_create(&callbacks);
     callbacks.read_coils = handle_read_coils;
+    callbacks.read_discrete_inputs = handle_read_discrete_inputs;
     callbacks.write_multiple_coils = handle_write_multiple_coils;
     callbacks.write_single_coil = handle_write_single_coil;
     callbacks.read_holding_registers = handle_read_holding_registers;
+    callbacks.read_input_registers = handle_read_input_registers;
     callbacks.write_multiple_registers = handle_write_multiple_registers;
     callbacks.write_single_register = handle_write_single_register;
 

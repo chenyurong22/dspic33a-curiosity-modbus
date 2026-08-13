@@ -47,9 +47,25 @@ This is a basic Modbus demo to show use of the nanoMODBUS library (https://githu
 
 The modbus_basic.X project was written for the dsPIC33AK128MC106 device running on the dsPIC33A Curiosity Platform Board P/N EV74H48A. 
 The application creates a Modbus RTU server. Custom user callback functions for nanomodbus are created in the modbus.c file. 
-The number of coils and registers used in the application are defined in modbus.h. Data transfer is done over the UART to USB 
+The number of coils, discrete inputs, holding registers, and input registers used in the application are defined in modbus.h. Data transfer is done over the UART to USB 
 interface of the Curiosity Platform Board. The Python script in the project directory uses the pymodbus library to create a basic 
-client to write and then read some registers and coils.
+client to write and then read registers, coils, discrete inputs, and input registers.
+
+The server supports the following Modbus function codes:
+
+| FC | Code | Name | Description |
+|----|------|------|-------------|
+| 01 | 0x01 | Read Coils | Read R/W digital outputs |
+| 02 | 0x02 | Read Discrete Inputs | Read read-only digital inputs |
+| 03 | 0x03 | Read Holding Registers | Read R/W 16-bit registers |
+| 04 | 0x04 | Read Input Registers | Read read-only 16-bit registers |
+| 05 | 0x05 | Write Single Coil | Write one digital output |
+| 06 | 0x06 | Write Single Register | Write one 16-bit register |
+| 15 | 0x0F | Write Multiple Coils | Write multiple digital outputs |
+| 16 | 0x10 | Write Multiple Registers | Write multiple 16-bit registers |
+
+**Discrete Inputs** (FC 02) are populated with an alternating bit pattern (even addresses = ON).  
+**Input Registers** (FC 04) provide live system data: uptime in seconds, raw millisecond counter, and static example values.
 
 ## MCC settings for reference
 
